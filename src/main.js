@@ -2,12 +2,24 @@ import React from 'react';
 import logo from './logo.jpg'; 
 import { textGenerator } from './textApi';
 
-
-let recipe = textGenerator('fish food recipe');
-console.log(recipe);
-
 export class Main extends React.Component {  //основная часть сайта куда должен генериться текст по запросу
+  constructor (props) {
+    super(props);
+    this.state = {
+      recipeText: null
+    }
+  }
   
+  async loadRecipe () {
+    let recipe = await textGenerator('Fish lasagna recipe');
+    console.log(typeof(recipe));
+    this.setState({ recipeText: recipe });
+  }
+
+  componentDidMount() {
+    this.loadRecipe();
+  }
+
   render() {
     
     return (
@@ -16,7 +28,7 @@ export class Main extends React.Component {  //основная часть са�
           <img src={logo} alt='generated food'/>
         </div> 
         <div className='query-result-text'>
-          <p>There should be some generated text here, ideally several paragraphs of it </p>
+          <p>{!this.state.recipeText ? 'Your recipe is loading!' : this.state.recipeText}</p>
         </div>
       </div>
     )
